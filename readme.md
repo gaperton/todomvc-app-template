@@ -1,19 +1,33 @@
-# TodoMVC App Template
+# NestedReact • [TodoMVC](http://todomvc.com)
 
-> Template used for creating [TodoMVC](http://todomvc.com) apps
+This is React add-on providing advanced data binding and state management to React applications, as well as convergence layer for intermixing React components and Backbone Views. 
 
-![](https://github.com/tastejs/todomvc-app-css/raw/master/screenshot.png)
+- Unidirectional data flow with OO data layer.
+- Advanced component's state management with [NestedTypes](https://github.com/Volicon/backbone.nestedTypes).
+- Comprehensive two-way data binding - [Guide to Data Binding Use Cases](/example/databinding.md)
+- Transparent interoperation with Backbone Views:
+	- React component can be used as backbone View. `new MyComponent.View({ props })`
+	- Backbone Views can be used as React components. `<React.subview View={ MyView } />`
+	- Simplified refactoring of Backbone Views to React components. `this.$`, `this.$el`, `this.$( sel )`, `this.model` works for React components too, as well as `this.trigger` and `this.listenTo`.
 
+Also, if you have Backbone application and want to start writing with React - you have no excuses any more.
+Wanna keep some of your cool Views? They works just fine? Keep 'em. 
+And use them in your new components written with React, which in turn you may use in other Backbone Views.
 
-## Getting started
+## Resources
 
-- Read the [Application Specification](https://github.com/tastejs/todomvc/blob/master/app-spec.md) before touching the template.
+- [Documentation](https://github.com/Volicon/NestedReact)
+- [Used by](http://www.volicon.com/)
 
-- Delete this file and rename `app-readme.md` to `readme.md` and fill it out.
+## Implementation
 
-- Clone this repo and install the dependencies with [npm](https://npmjs.com) by running: `npm install`.
+This TodoMVC application is written to demonstrate two-way data binding, data layer, and state management facilities,
+provided by combination of [NestedReact](https://github.com/Volicon/NestedReact) and 
+[NestedTypes](https://github.com/Volicon/NestedTypes) data framework.
 
+This example shows how to achieve pure unidirectional data flow (which is common for Flux applications)
+without the usage of `Flux` pattern and excessive implementation efforts.
 
-## License
+## Credit
 
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br />This <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" rel="dct:type">work</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://sindresorhus.com" property="cc:attributionName" rel="cc:attributionURL">TasteJS</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/deed.en_US">Creative Commons Attribution 4.0 International License</a>.
+Created by Vlad Balin & [Volicon](http://www.volicon.com/)
