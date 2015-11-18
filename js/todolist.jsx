@@ -1,11 +1,16 @@
-import React from 'nestedreact'
+import React, { PropTypes } from 'nestedreact'
 import cx from 'classnames'
 
-import ToDoModel from './model'
+import { ToDo } from './model'
 
 const TodoList = React.createClass({
+	propTypes : {
+		todos : PropTypes.instanceOf( ToDo.Collection ),
+		filterDone : PropTypes.bool
+	},
+
 	attributes : {
-		editing : ToDoModel.value( null )
+		editing : ToDo.from( '^props.todos' )
 	},
 
 	render(){

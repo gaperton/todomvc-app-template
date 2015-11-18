@@ -60,8 +60,6 @@
 	
 	var _modelJs = __webpack_require__(168);
 	
-	var _modelJs2 = _interopRequireDefault(_modelJs);
-	
 	var _todolistJsx = __webpack_require__(169);
 	
 	var _todolistJsx2 = _interopRequireDefault(_todolistJsx);
@@ -77,19 +75,20 @@
 	var App = _nestedreact2['default'].createClass({
 		displayName: 'App',
 	
+		Model: _modelJs.LocalStorage,
+	
 		attributes: {
 			id: 'todo-mvc',
-			todos: _modelJs2['default'].Collection,
+			todos: _modelJs.ToDo.Collection,
 			filterDone: Boolean.value(null)
 		},
 	
 		componentWillMount: function componentWillMount() {
-			var state = this.state;
+			var _this = this;
 	
-			var json = localStorage.getItem(state.id);
-			json && state.set(JSON.parse(json), { parse: true });
+			this.state.fetch();
 			window.onunload = function () {
-				return localStorage.setItem(state.id, JSON.stringify(state));
+				return _this.state.save();
 			};
 		},
 	
@@ -35439,8 +35438,26 @@
 		}
 	});
 	
-	exports['default'] = ToDo;
-	module.exports = exports['default'];
+	exports.ToDo = ToDo;
+	var LocalStorage = _nestedtypes.Model.extend({
+		fetch: function fetch() {
+			if (this.id) {
+				var json = localStorage.getItem(this.id);
+				json && this.set(JSON.parse(json), { parse: true });
+			}
+		},
+	
+		save: function save(attrs) {
+			if (attrs) {
+				this.set(attrs);
+			}
+	
+			if (this.id) {
+				localStorage.setItem(this.id, JSON.stringify(this));
+			}
+		}
+	});
+	exports.LocalStorage = LocalStorage;
 
 /***/ },
 /* 169 */
@@ -35464,13 +35481,16 @@
 	
 	var _model = __webpack_require__(168);
 	
-	var _model2 = _interopRequireDefault(_model);
-	
 	var TodoList = _nestedreact2['default'].createClass({
 		displayName: 'TodoList',
 	
+		propTypes: {
+			todos: _nestedreact.PropTypes.instanceOf(_model.ToDo.Collection),
+			filterDone: _nestedreact.PropTypes.bool
+		},
+	
 		attributes: {
-			editing: _model2['default'].value(null)
+			editing: _model.ToDo.from('^props.todos')
 		},
 	
 		render: function render() {

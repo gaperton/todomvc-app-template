@@ -1,23 +1,23 @@
 import 'css/app.css'
 import React from 'nestedreact'
 import ReactDOM from 'react-dom'
-import ToDoModel from './model.js'
+import { ToDo, LocalStorage } from './model.js'
 import TodoList from './todolist.jsx'
 import Filter from './filter.jsx'
 import AddTodo from './addtodo.jsx'
 
 const App = React.createClass({
+	Model : LocalStorage,
+
 	attributes : {
 		id : 'todo-mvc',
-		todos : ToDoModel.Collection,
+		todos : ToDo.Collection,
 		filterDone : Boolean.value( null )
 	},
 
 	componentWillMount(){
-		let { state } = this;
-		const json = localStorage.getItem( state.id );
-		json && ( state.set( JSON.parse( json ), { parse: true }) );
-		window.onunload = () => localStorage.setItem( state.id, JSON.stringify( state ) );
+		this.state.fetch();
+		window.onunload = () => this.state.save();
 	},
 
 	render(){
