@@ -7,8 +7,16 @@ import TodoList from './todolist.jsx'
 
 const App = React.createClass({
 	attributes : {
+		id : 'todo-mvc',
 		todos : ToDoModel.Collection,
 		filterDone : Boolean.value( null )
+	},
+
+	componentWillMount(){
+		let { state } = this;
+		const json = localStorage.getItem( state.id );
+		json && ( state.set( JSON.parse( json ), { parse: true }) );
+		window.onunload = () => localStorage.setItem( state.id, JSON.stringify( state ) );
 	},
 
 	render(){
