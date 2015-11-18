@@ -3,6 +3,7 @@ import React from 'nestedreact'
 import { Link } from 'nestedtypes'
 import ReactDOM from 'react-dom'
 import ToDoModel from './model.js'
+import TodoList from './todolist.jsx'
 
 const App = React.createClass({
 	attributes : {
@@ -15,9 +16,9 @@ const App = React.createClass({
 		return (
 			<div>
 				<section className="todoapp">
-					<Header onEnter={ desc => todos.create({ desc : desc }) }/>
-					<Main todos={ todos } />
-					<Footer/>
+					<AddTodo onEnter={ desc => todos.addTodo( desc ) }/>
+					<TodoList todos={ todos } />
+					<Filter/>
 				</section>
 				<footer className="info">
 					<p>Double-click to edit a todo</p>
@@ -32,7 +33,7 @@ const App = React.createClass({
 	}
 });
 
-const Header = React.createClass({
+const AddTodo = React.createClass({
 	attributes : {
 		desc : String
 	},
@@ -59,38 +60,7 @@ const Header = React.createClass({
 	}
 });
 
-const Main = ({ todos }) => React.createClass({
-	attributes : {
-		editing : ToDoModel.value( null )
-	},
-
-	render(){
-		const { state } = this;
-
-		return (
-			<section className="main">
-				<input className="toggle-all" type="checkbox"/>
-				<label for="toggle-all">Mark all as complete</label>
-
-				<ul className="todo-list">
-					{ todos.map( todo => (
-					<li key={ todo.cid } className={ ( todo.done ? "completed" : "view" ) + ( state.editing === todo ? ' editing' : '' )}>
-						<div className="view">
-							<input className="toggle" type="checkbox" checkedLink={ todo.getLink( 'done' ) }/>
-							<label onClick={ () => state.editing = todo }>{ todo.desc }</label>
-
-							<button className="destroy" onClick={ () => todos.remove( todo ) }></button>
-						</div>
-						<input className="edit" valueLink={ todo.getLink( 'desc' ) }/>
-					</li>
-						))}
-				</ul>
-			</section>
-		);
-	}
-});
-
-const Footer = () => (
+const Filter = () => (
 	<footer className="footer">
 
 		<span className="todo-count"><strong>0</strong> item left</span>

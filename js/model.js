@@ -6,12 +6,20 @@ let ToDo = Model.extend({
 		desc : String
 	},
 
-	save(){},
+	remove(){
+		this.collection.remove( this );
+	},
 
 	collection : {
+		addTodo( desc ){
+			this.add( new ToDo({ desc : desc }) );
+		},
+
 		properties : {
 			allDone : {
-				get(){ return this.every( todo => todo.done ); },
+				get(){
+					return this.every( todo => todo.done );
+				},
 				set( val ){
 					this.transaction( () =>{
 						this.each( todo => todo.done = val );
