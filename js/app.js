@@ -54,28 +54,128 @@
 	
 	var _nestedreact2 = _interopRequireDefault(_nestedreact);
 	
+	var _nestedtypes = __webpack_require__(165);
+	
 	var _reactDom = __webpack_require__(164);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var App = function App() {
-		return _nestedreact2['default'].createElement(
-			'div',
-			null,
-			_nestedreact2['default'].createElement(
-				'section',
-				{ className: 'todoapp' },
+	var _modelJs = __webpack_require__(168);
+	
+	var _modelJs2 = _interopRequireDefault(_modelJs);
+	
+	var App = _nestedreact2['default'].createClass({
+		displayName: 'App',
+	
+		attributes: {
+			todos: _modelJs2['default'].Collection
+		},
+	
+		render: function render() {
+			var todos = this.state.todos;
+	
+			return _nestedreact2['default'].createElement(
+				'div',
+				null,
 				_nestedreact2['default'].createElement(
-					'header',
-					{ className: 'header' },
-					_nestedreact2['default'].createElement(
-						'h1',
-						null,
-						'todos'
-					),
-					_nestedreact2['default'].createElement('input', { className: 'new-todo', placeholder: 'What needs to be done?', autofocus: true })
+					'section',
+					{ className: 'todoapp' },
+					_nestedreact2['default'].createElement(Header, { onEnter: function (desc) {
+							return todos.create({ desc: desc });
+						} }),
+					_nestedreact2['default'].createElement(Main, { todos: todos }),
+					_nestedreact2['default'].createElement(Footer, null)
 				),
 				_nestedreact2['default'].createElement(
+					'footer',
+					{ className: 'info' },
+					_nestedreact2['default'].createElement(
+						'p',
+						null,
+						'Double-click to edit a todo'
+					),
+					_nestedreact2['default'].createElement(
+						'p',
+						null,
+						'Template by ',
+						_nestedreact2['default'].createElement(
+							'a',
+							{ href: 'http://sindresorhus.com' },
+							'Sindre Sorhus'
+						)
+					),
+					_nestedreact2['default'].createElement(
+						'p',
+						null,
+						'Created by ',
+						_nestedreact2['default'].createElement(
+							'a',
+							{ href: 'http://todomvc.com' },
+							'Vlad Balin'
+						)
+					),
+					_nestedreact2['default'].createElement(
+						'p',
+						null,
+						'Part of ',
+						_nestedreact2['default'].createElement(
+							'a',
+							{ href: 'http://todomvc.com' },
+							'TodoMVC'
+						)
+					)
+				)
+			);
+		}
+	});
+	
+	var Header = _nestedreact2['default'].createClass({
+		displayName: 'Header',
+	
+		attributes: {
+			desc: String
+		},
+	
+		render: function render() {
+			return _nestedreact2['default'].createElement(
+				'header',
+				{ className: 'header' },
+				_nestedreact2['default'].createElement(
+					'h1',
+					null,
+					'todos'
+				),
+				_nestedreact2['default'].createElement('input', { className: 'new-todo', placeholder: 'What needs to be done?', autofocus: true,
+					valueLink: this.state.getLink('desc'),
+					onKeyDown: this.onKeyDown
+				})
+			);
+		},
+	
+		onKeyDown: function onKeyDown(_ref) {
+			var keyCode = _ref.keyCode;
+	
+			if (keyCode === 13) {
+				var state = this.state;
+				var props = this.props;
+	
+				props.onEnter && props.onEnter(state.desc);
+				state.desc = "";
+			}
+		}
+	});
+	
+	var Main = function Main(_ref2) {
+		var todos = _ref2.todos;
+		return _nestedreact2['default'].createClass({
+			attributes: {
+				editing: _modelJs2['default'].value(null)
+			},
+	
+			render: function render() {
+				var state = this.state;
+	
+				return _nestedreact2['default'].createElement(
 					'section',
 					{ className: 'main' },
 					_nestedreact2['default'].createElement('input', { className: 'toggle-all', type: 'checkbox' }),
@@ -87,129 +187,83 @@
 					_nestedreact2['default'].createElement(
 						'ul',
 						{ className: 'todo-list' },
-						_nestedreact2['default'].createElement(
-							'li',
-							{ className: 'completed' },
-							_nestedreact2['default'].createElement(
-								'div',
-								{ className: 'view' },
-								_nestedreact2['default'].createElement('input', { className: 'toggle', type: 'checkbox', checked: true }),
+						todos.map(function (todo) {
+							return _nestedreact2['default'].createElement(
+								'li',
+								{ key: todo.cid, className: (todo.done ? "completed" : "view") + (state.editing === todo ? ' editing' : '') },
 								_nestedreact2['default'].createElement(
-									'label',
-									null,
-									'Taste JavaScript'
+									'div',
+									{ className: 'view' },
+									_nestedreact2['default'].createElement('input', { className: 'toggle', type: 'checkbox', checkedLink: todo.getLink('done') }),
+									_nestedreact2['default'].createElement(
+										'label',
+										{ onClick: function () {
+												return state.editing = todo;
+											} },
+										todo.desc
+									),
+									_nestedreact2['default'].createElement('button', { className: 'destroy', onClick: function () {
+											return todos.remove(todo);
+										} })
 								),
-								_nestedreact2['default'].createElement('button', { className: 'destroy' })
-							),
-							_nestedreact2['default'].createElement('input', { className: 'edit', value: 'Create a TodoMVC template' })
-						),
-						_nestedreact2['default'].createElement(
-							'li',
-							null,
-							_nestedreact2['default'].createElement(
-								'div',
-								{ className: 'view' },
-								_nestedreact2['default'].createElement('input', { className: 'toggle', type: 'checkbox' }),
-								_nestedreact2['default'].createElement(
-									'label',
-									null,
-									'Buy a unicorn'
-								),
-								_nestedreact2['default'].createElement('button', { className: 'destroy' })
-							),
-							_nestedreact2['default'].createElement('input', { className: 'edit', value: 'Rule the web' })
-						)
+								_nestedreact2['default'].createElement('input', { className: 'edit', valueLink: todo.getLink('desc') })
+							);
+						})
+					)
+				);
+			}
+		});
+	};
+	
+	var Footer = function Footer() {
+		return _nestedreact2['default'].createElement(
+			'footer',
+			{ className: 'footer' },
+			_nestedreact2['default'].createElement(
+				'span',
+				{ className: 'todo-count' },
+				_nestedreact2['default'].createElement(
+					'strong',
+					null,
+					'0'
+				),
+				' item left'
+			),
+			_nestedreact2['default'].createElement(
+				'ul',
+				{ className: 'filters' },
+				_nestedreact2['default'].createElement(
+					'li',
+					null,
+					_nestedreact2['default'].createElement(
+						'a',
+						{ className: 'selected', href: '#/' },
+						'All'
 					)
 				),
 				_nestedreact2['default'].createElement(
-					'footer',
-					{ className: 'footer' },
+					'li',
+					null,
 					_nestedreact2['default'].createElement(
-						'span',
-						{ className: 'todo-count' },
-						_nestedreact2['default'].createElement(
-							'strong',
-							null,
-							'0'
-						),
-						' item left'
-					),
+						'a',
+						{ href: '#/active' },
+						'Active'
+					)
+				),
+				_nestedreact2['default'].createElement(
+					'li',
+					null,
 					_nestedreact2['default'].createElement(
-						'ul',
-						{ className: 'filters' },
-						_nestedreact2['default'].createElement(
-							'li',
-							null,
-							_nestedreact2['default'].createElement(
-								'a',
-								{ className: 'selected', href: '#/' },
-								'All'
-							)
-						),
-						_nestedreact2['default'].createElement(
-							'li',
-							null,
-							_nestedreact2['default'].createElement(
-								'a',
-								{ href: '#/active' },
-								'Active'
-							)
-						),
-						_nestedreact2['default'].createElement(
-							'li',
-							null,
-							_nestedreact2['default'].createElement(
-								'a',
-								{ href: '#/completed' },
-								'Completed'
-							)
-						)
-					),
-					_nestedreact2['default'].createElement(
-						'button',
-						{ className: 'clear-completed' },
-						'Clear completed'
+						'a',
+						{ href: '#/completed' },
+						'Completed'
 					)
 				)
 			),
 			_nestedreact2['default'].createElement(
-				'footer',
-				{ className: 'info' },
-				_nestedreact2['default'].createElement(
-					'p',
-					null,
-					'Double-click to edit a todo'
-				),
-				_nestedreact2['default'].createElement(
-					'p',
-					null,
-					'Template by ',
-					_nestedreact2['default'].createElement(
-						'a',
-						{ href: 'http://sindresorhus.com' },
-						'Sindre Sorhus'
-					)
-				),
-				_nestedreact2['default'].createElement(
-					'p',
-					null,
-					'Created by ',
-					_nestedreact2['default'].createElement(
-						'a',
-						{ href: 'http://todomvc.com' },
-						'you'
-					)
-				),
-				_nestedreact2['default'].createElement(
-					'p',
-					null,
-					'Part of ',
-					_nestedreact2['default'].createElement(
-						'a',
-						{ href: 'http://todomvc.com' },
-						'TodoMVC'
-					)
-				)
+				'button',
+				{ className: 'clear-completed' },
+				'Clear completed'
 			)
 		);
 	};
@@ -35474,6 +35528,51 @@
 	
 	}));
 
+
+/***/ },
+/* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+		value: true
+	});
+	
+	var _nestedtypes = __webpack_require__(165);
+	
+	var ToDo = _nestedtypes.Model.extend({
+		defaults: {
+			done: Boolean,
+			desc: String
+		},
+	
+		save: function save() {},
+	
+		collection: {
+			properties: {
+				allDone: {
+					get: function get() {
+						return this.every(function (todo) {
+							return todo.done;
+						});
+					},
+					set: function set(val) {
+						var _this = this;
+	
+						this.transaction(function () {
+							_this.each(function (todo) {
+								return todo.done = val;
+							});
+						});
+					}
+				}
+			}
+		}
+	});
+	
+	exports['default'] = ToDo;
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);
