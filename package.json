@@ -13,7 +13,7 @@
     "css-loader": "^0.23.0",
     "history": "^1.13.1",
     "jquery": "^2.1.4",
-    "nestedreact": "^0.3.0",
+    "nestedreact": "^0.4.0",
     "nestedtypes": "^1.2.2",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
