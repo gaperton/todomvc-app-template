@@ -9,8 +9,14 @@ const TodoList = React.createClass({
 	},
 
 	render(){
-		const { todos } = this.props,
+		const { todos, filterDone } = this.props,
 			  editingLink = this.state.getLink( 'editing' );
+
+		let	  filtered = todos.models;
+
+		if( filterDone !== null ){
+			filtered = _.filter( filtered, todo => todo.done === filterDone );
+		}
 
 		return (
 			<section className="main">
@@ -19,7 +25,7 @@ const TodoList = React.createClass({
 				<label htmlFor="toggle-all">Mark all as complete</label>
 
 				<ul className="todo-list">
-					{ todos.map( todo => (
+					{ filtered.map( todo => (
 						<TodoItem key={ todo.cid } todo={ todo } editingLink={ editingLink } />
 					))}
 				</ul>

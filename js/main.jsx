@@ -7,7 +7,8 @@ import TodoList from './todolist.jsx'
 
 const App = React.createClass({
 	attributes : {
-		todos : ToDoModel.Collection
+		todos : ToDoModel.Collection,
+		filterDone : Boolean.value( null )
 	},
 
 	render(){
@@ -17,8 +18,11 @@ const App = React.createClass({
 			<div>
 				<section className="todoapp">
 					<AddTodo onEnter={ desc => todos.addTodo( desc ) }/>
-					<TodoList todos={ todos } />
-					<Filter/>
+					<TodoList todos={ todos } filterDone={ this.state.filterDone }/>
+					<Filter count={ todos.activeCount }
+							filterLink={ this.state.getLink( 'filterDone' )}
+							onClear={ () => todos.clearCompleted() }
+					/>
 				</section>
 				<footer className="info">
 					<p>Double-click to edit a todo</p>
@@ -60,25 +64,33 @@ const AddTodo = React.createClass({
 	}
 });
 
-const Filter = () => (
+const Filter = ({ count, filterLink, onClear }) => (
 	<footer className="footer">
 
-		<span className="todo-count"><strong>0</strong> item left</span>
+		<span className="todo-count"><strong>{ count }</strong> item left</span>
 
 		<ul className="filters">
 			<li>
-				<a className="selected" href="#/">All</a>
+				<Radio checkedLink={ filterLink.equals( null ) } href="#/">All</Radio>
 			</li>
 			<li>
-				<a href="#/active">Active</a>
+				<Radio checkedLink={ filterLink.equals( false ) } href="#/active">Active</Radio>
 			</li>
 			<li>
-				<a href="#/completed">Completed</a>
+				<Radio checkedLink={ filterLink.equals( true ) } href="#/completed">Completed</Radio>
 			</li>
 		</ul>
 
-		<button className="clear-completed">Clear completed</button>
+		<button className="clear-completed" onClick={ onClear }>Clear completed</button>
 	</footer>
+);
+
+const Radio = ({ checkedLink, children, ...props }) => (
+	<a className={ checkedLink.value ? 'selected' : '' }
+	   onClick={ () => checkedLink.set( true ) }
+		{ ...props }>
+		{ children }
+	</a>
 );
 
 ReactDOM.render( <App />, document.getElementById( 'app-mount-root' ) );

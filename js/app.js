@@ -46,6 +46,10 @@
 
 	'use strict';
 	
+	var _objectWithoutProperties = __webpack_require__(171)['default'];
+	
+	var _extends = __webpack_require__(172)['default'];
+	
 	var _interopRequireDefault = __webpack_require__(1)['default'];
 	
 	__webpack_require__(2);
@@ -72,7 +76,8 @@
 		displayName: 'App',
 	
 		attributes: {
-			todos: _modelJs2['default'].Collection
+			todos: _modelJs2['default'].Collection,
+			filterDone: Boolean.value(null)
 		},
 	
 		render: function render() {
@@ -87,8 +92,13 @@
 					_nestedreact2['default'].createElement(AddTodo, { onEnter: function (desc) {
 							return todos.addTodo(desc);
 						} }),
-					_nestedreact2['default'].createElement(_todolistJsx2['default'], { todos: todos }),
-					_nestedreact2['default'].createElement(Filter, null)
+					_nestedreact2['default'].createElement(_todolistJsx2['default'], { todos: todos, filterDone: this.state.filterDone }),
+					_nestedreact2['default'].createElement(Filter, { count: todos.activeCount,
+						filterLink: this.state.getLink('filterDone'),
+						onClear: function () {
+							return todos.clearCompleted();
+						}
+					})
 				),
 				_nestedreact2['default'].createElement(
 					'footer',
@@ -169,7 +179,10 @@
 		}
 	});
 	
-	var Filter = function Filter() {
+	var Filter = function Filter(_ref2) {
+		var count = _ref2.count;
+		var filterLink = _ref2.filterLink;
+		var onClear = _ref2.onClear;
 		return _nestedreact2['default'].createElement(
 			'footer',
 			{ className: 'footer' },
@@ -179,7 +192,7 @@
 				_nestedreact2['default'].createElement(
 					'strong',
 					null,
-					'0'
+					count
 				),
 				' item left'
 			),
@@ -190,8 +203,8 @@
 					'li',
 					null,
 					_nestedreact2['default'].createElement(
-						'a',
-						{ className: 'selected', href: '#/' },
+						Radio,
+						{ checkedLink: filterLink.equals(null), href: '#/' },
 						'All'
 					)
 				),
@@ -199,8 +212,8 @@
 					'li',
 					null,
 					_nestedreact2['default'].createElement(
-						'a',
-						{ href: '#/active' },
+						Radio,
+						{ checkedLink: filterLink.equals(false), href: '#/active' },
 						'Active'
 					)
 				),
@@ -208,17 +221,34 @@
 					'li',
 					null,
 					_nestedreact2['default'].createElement(
-						'a',
-						{ href: '#/completed' },
+						Radio,
+						{ checkedLink: filterLink.equals(true), href: '#/completed' },
 						'Completed'
 					)
 				)
 			),
 			_nestedreact2['default'].createElement(
 				'button',
-				{ className: 'clear-completed' },
+				{ className: 'clear-completed', onClick: onClear },
 				'Clear completed'
 			)
+		);
+	};
+	
+	var Radio = function Radio(_ref3) {
+		var checkedLink = _ref3.checkedLink;
+		var children = _ref3.children;
+	
+		var props = _objectWithoutProperties(_ref3, ['checkedLink', 'children']);
+	
+		return _nestedreact2['default'].createElement(
+			'a',
+			_extends({ className: checkedLink.value ? 'selected' : '',
+				onClick: function () {
+					return checkedLink.set(true);
+				}
+			}, props),
+			children
 		);
 	};
 	
@@ -35473,6 +35503,12 @@
 				this.add(new ToDo({ desc: desc }));
 			},
 	
+			clearCompleted: function clearCompleted() {
+				this.remove(this.filter(function (todo) {
+					return todo.done;
+				}));
+			},
+	
 			properties: {
 				allDone: {
 					get: function get() {
@@ -35489,6 +35525,12 @@
 							});
 						});
 					}
+				},
+	
+				activeCount: function activeCount() {
+					return this.filter(function (todo) {
+						return !todo.done;
+					}).length;
 				}
 			}
 		}
@@ -35501,7 +35543,7 @@
 /* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(_) {'use strict';
 	
 	var _interopRequireDefault = __webpack_require__(1)['default'];
 	
@@ -35529,8 +35571,18 @@
 		},
 	
 		render: function render() {
-			var todos = this.props.todos;
+			var _props = this.props;
+			var todos = _props.todos;
+			var filterDone = _props.filterDone;
 			var editingLink = this.state.getLink('editing');
+	
+			var filtered = todos.models;
+	
+			if (filterDone !== null) {
+				filtered = _.filter(filtered, function (todo) {
+					return todo.done === filterDone;
+				});
+			}
 	
 			return _nestedreact2['default'].createElement(
 				'section',
@@ -35545,7 +35597,7 @@
 				_nestedreact2['default'].createElement(
 					'ul',
 					{ className: 'todo-list' },
-					todos.map(function (todo) {
+					filtered.map(function (todo) {
 						return _nestedreact2['default'].createElement(TodoItem, { key: todo.cid, todo: todo, editingLink: editingLink });
 					})
 				)
@@ -35594,6 +35646,7 @@
 		);
 	};
 	module.exports = exports['default'];
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(166)))
 
 /***/ },
 /* 170 */
@@ -35648,6 +35701,281 @@
 		}
 	}());
 
+
+/***/ },
+/* 171 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	exports["default"] = function (obj, keys) {
+	  var target = {};
+	
+	  for (var i in obj) {
+	    if (keys.indexOf(i) >= 0) continue;
+	    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+	    target[i] = obj[i];
+	  }
+	
+	  return target;
+	};
+	
+	exports.__esModule = true;
+
+/***/ },
+/* 172 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _Object$assign = __webpack_require__(173)["default"];
+	
+	exports["default"] = _Object$assign || function (target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i];
+	
+	    for (var key in source) {
+	      if (Object.prototype.hasOwnProperty.call(source, key)) {
+	        target[key] = source[key];
+	      }
+	    }
+	  }
+	
+	  return target;
+	};
+	
+	exports.__esModule = true;
+
+/***/ },
+/* 173 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(174), __esModule: true };
+
+/***/ },
+/* 174 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(175);
+	module.exports = __webpack_require__(178).Object.assign;
+
+/***/ },
+/* 175 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.3.1 Object.assign(target, source)
+	var $export = __webpack_require__(176);
+	
+	$export($export.S + $export.F, 'Object', {assign: __webpack_require__(181)});
+
+/***/ },
+/* 176 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var global    = __webpack_require__(177)
+	  , core      = __webpack_require__(178)
+	  , ctx       = __webpack_require__(179)
+	  , PROTOTYPE = 'prototype';
+	
+	var $export = function(type, name, source){
+	  var IS_FORCED = type & $export.F
+	    , IS_GLOBAL = type & $export.G
+	    , IS_STATIC = type & $export.S
+	    , IS_PROTO  = type & $export.P
+	    , IS_BIND   = type & $export.B
+	    , IS_WRAP   = type & $export.W
+	    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
+	    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE]
+	    , key, own, out;
+	  if(IS_GLOBAL)source = name;
+	  for(key in source){
+	    // contains in native
+	    own = !IS_FORCED && target && key in target;
+	    if(own && key in exports)continue;
+	    // export native or passed
+	    out = own ? target[key] : source[key];
+	    // prevent global pollution for namespaces
+	    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+	    // bind timers to global for call from export context
+	    : IS_BIND && own ? ctx(out, global)
+	    // wrap global constructors for prevent change them in library
+	    : IS_WRAP && target[key] == out ? (function(C){
+	      var F = function(param){
+	        return this instanceof C ? new C(param) : C(param);
+	      };
+	      F[PROTOTYPE] = C[PROTOTYPE];
+	      return F;
+	    // make static versions for prototype methods
+	    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+	    if(IS_PROTO)(exports[PROTOTYPE] || (exports[PROTOTYPE] = {}))[key] = out;
+	  }
+	};
+	// type bitmap
+	$export.F = 1;  // forced
+	$export.G = 2;  // global
+	$export.S = 4;  // static
+	$export.P = 8;  // proto
+	$export.B = 16; // bind
+	$export.W = 32; // wrap
+	module.exports = $export;
+
+/***/ },
+/* 177 */
+/***/ function(module, exports) {
+
+	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+	var global = module.exports = typeof window != 'undefined' && window.Math == Math
+	  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
+	if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
+
+/***/ },
+/* 178 */
+/***/ function(module, exports) {
+
+	var core = module.exports = {version: '1.2.6'};
+	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+
+/***/ },
+/* 179 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// optional / simple context binding
+	var aFunction = __webpack_require__(180);
+	module.exports = function(fn, that, length){
+	  aFunction(fn);
+	  if(that === undefined)return fn;
+	  switch(length){
+	    case 1: return function(a){
+	      return fn.call(that, a);
+	    };
+	    case 2: return function(a, b){
+	      return fn.call(that, a, b);
+	    };
+	    case 3: return function(a, b, c){
+	      return fn.call(that, a, b, c);
+	    };
+	  }
+	  return function(/* ...args */){
+	    return fn.apply(that, arguments);
+	  };
+	};
+
+/***/ },
+/* 180 */
+/***/ function(module, exports) {
+
+	module.exports = function(it){
+	  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+	  return it;
+	};
+
+/***/ },
+/* 181 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.1 Object.assign(target, source, ...)
+	var $        = __webpack_require__(182)
+	  , toObject = __webpack_require__(183)
+	  , IObject  = __webpack_require__(185);
+	
+	// should work with symbols and should have deterministic property order (V8 bug)
+	module.exports = __webpack_require__(187)(function(){
+	  var a = Object.assign
+	    , A = {}
+	    , B = {}
+	    , S = Symbol()
+	    , K = 'abcdefghijklmnopqrst';
+	  A[S] = 7;
+	  K.split('').forEach(function(k){ B[k] = k; });
+	  return a({}, A)[S] != 7 || Object.keys(a({}, B)).join('') != K;
+	}) ? function assign(target, source){ // eslint-disable-line no-unused-vars
+	  var T     = toObject(target)
+	    , $$    = arguments
+	    , $$len = $$.length
+	    , index = 1
+	    , getKeys    = $.getKeys
+	    , getSymbols = $.getSymbols
+	    , isEnum     = $.isEnum;
+	  while($$len > index){
+	    var S      = IObject($$[index++])
+	      , keys   = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S)
+	      , length = keys.length
+	      , j      = 0
+	      , key;
+	    while(length > j)if(isEnum.call(S, key = keys[j++]))T[key] = S[key];
+	  }
+	  return T;
+	} : Object.assign;
+
+/***/ },
+/* 182 */
+/***/ function(module, exports) {
+
+	var $Object = Object;
+	module.exports = {
+	  create:     $Object.create,
+	  getProto:   $Object.getPrototypeOf,
+	  isEnum:     {}.propertyIsEnumerable,
+	  getDesc:    $Object.getOwnPropertyDescriptor,
+	  setDesc:    $Object.defineProperty,
+	  setDescs:   $Object.defineProperties,
+	  getKeys:    $Object.keys,
+	  getNames:   $Object.getOwnPropertyNames,
+	  getSymbols: $Object.getOwnPropertySymbols,
+	  each:       [].forEach
+	};
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 7.1.13 ToObject(argument)
+	var defined = __webpack_require__(184);
+	module.exports = function(it){
+	  return Object(defined(it));
+	};
+
+/***/ },
+/* 184 */
+/***/ function(module, exports) {
+
+	// 7.2.1 RequireObjectCoercible(argument)
+	module.exports = function(it){
+	  if(it == undefined)throw TypeError("Can't call method on  " + it);
+	  return it;
+	};
+
+/***/ },
+/* 185 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// fallback for non-array-like ES3 and non-enumerable old V8 strings
+	var cof = __webpack_require__(186);
+	module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
+	  return cof(it) == 'String' ? it.split('') : Object(it);
+	};
+
+/***/ },
+/* 186 */
+/***/ function(module, exports) {
+
+	var toString = {}.toString;
+	
+	module.exports = function(it){
+	  return toString.call(it).slice(8, -1);
+	};
+
+/***/ },
+/* 187 */
+/***/ function(module, exports) {
+
+	module.exports = function(exec){
+	  try {
+	    return !!exec();
+	  } catch(e){
+	    return true;
+	  }
+	};
 
 /***/ }
 /******/ ]);

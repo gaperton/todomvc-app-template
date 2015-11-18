@@ -15,6 +15,10 @@ let ToDo = Model.extend({
 			this.add( new ToDo({ desc : desc }) );
 		},
 
+		clearCompleted(){
+			this.remove( this.filter( todo => todo.done ) );
+		},
+
 		properties : {
 			allDone : {
 				get(){
@@ -25,6 +29,10 @@ let ToDo = Model.extend({
 						this.each( todo => todo.done = val );
 					});
 				}
+			},
+
+			activeCount(){
+				return this.filter( todo => !todo.done ).length;
 			}
 		}
 	}
