@@ -29,7 +29,7 @@ This example shows how to achieve pure unidirectional data flow (which is common
 without the usage of `Flux` pattern and excessive implementation efforts.
 
 ##FAQ
-### What does `editing : ToDo.from( '^props.todos' )` from `todolist.jsx` mean?
+##### What does `editing : ToDo.from( '^props.todos' )` from `todolist.jsx` mean?
 Shortly, this reference is a path relative to `this`. Symbol `^` means that we reference something from the upper level. Methods `.from` and `.subsetOf` are serialized as `id` and array of `id` from the model. You work with them same as with simple model or collection. To get this `id` we need a reference to the whole model. 
 
 For instance, `someAttr : Model.from( 'items' )` means that in `someAttr` you have one of the models from collection `item`. Common use case: you have a list and you need a reference for selected item. 
