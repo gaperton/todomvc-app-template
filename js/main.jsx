@@ -21,7 +21,7 @@ const App = React.createClass({
 	},
 
 	render(){
-		let { todos } = this.state;
+		let todos = this.state.todos;
 
 		return (
 			<div>
@@ -47,4 +47,3 @@ const App = React.createClass({
 });
 
 ReactDOM.render( <App />, document.getElementById( 'app-mount-root' ) );
-

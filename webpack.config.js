@@ -1,12 +1,16 @@
 var webpack = require( 'webpack' );
 
 module.exports = {
-    entry  : './js/main.jsx',
+    entry  : {
+        main : './js/main.jsx',
+        test : './test.jsx'
+    },
+
     output : {
         // export itself to a global var
         path       : __dirname + '/js',
         publicPath : '/js/',
-        filename   : 'app.js'
+        filename   : '[name].app.js'
     },
 
     devtool : 'source-map',
