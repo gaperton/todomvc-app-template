@@ -9,7 +9,7 @@ import AddTodo from './addtodo.jsx'
 const App = React.createClass({
 	Model : LocalStorage,
 
-	attributes : {
+	state : {
 		id : 'todo-mvc',
 		todos : ToDo.Collection,
 		filterDone : Boolean.value( null )
