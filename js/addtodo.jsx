@@ -1,7 +1,11 @@
 import React from 'nestedreact'
 
 const AddTodo = React.createClass({
-	attributes : {
+	props : {
+		onEnter : Function
+	},
+
+	state : {
 		desc : String
 	},
 

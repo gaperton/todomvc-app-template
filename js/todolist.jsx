@@ -4,14 +4,16 @@ import cx from 'classnames'
 import { ToDo } from './model'
 
 const TodoList = React.createClass({
-	propTypes : {
-		todos : PropTypes.instanceOf( ToDo.Collection ),
-		filterDone : PropTypes.bool
+	props : {
+		todos : ToDo.Collection,
+		filterDone : Boolean
 	},
 
-	attributes : {
+	state : {
 		editing : ToDo.from( '^props.todos' )
 	},
+
+	pureRender : true,
 
 	render(){
 		const { todos, filterDone } = this.props,
