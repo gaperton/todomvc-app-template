@@ -1,32 +1,32 @@
 # NestedReact • [TodoMVC](http://todomvc.com)
 
-This is React add-on providing advanced data binding and state management to React applications, as well as convergence layer for intermixing React components and Backbone Views. 
+React application architecture with [classical OO models](https://github.com/volicon/nestedtypes) in the data layer.
 
-- Unidirectional data flow with OO data layer.
-- Advanced component's state management with [NestedTypes](https://github.com/Volicon/backbone.nestedTypes).
-- Comprehensive two-way data binding - [Guide to Data Binding Use Cases](/example/databinding.md)
-- Transparent interoperation with Backbone Views:
-	- React component can be used as backbone View. `new MyComponent.View({ props })`
-	- Backbone Views can be used as React components. `<React.subview View={ MyView } />`
-	- Simplified refactoring of Backbone Views to React components. `this.$`, `this.$el`, `this.$( sel )`, `this.model` works for React components too, as well as `this.trigger` and `this.listenTo`.
+Feature list:
 
-Also, if you have Backbone application and want to start writing with React - you have no excuses any more.
-Wanna keep some of your cool Views? They works just fine? Keep 'em. 
-And use them in your new components written with React, which in turn you may use in other Backbone Views.
+- First-class support for mutable models and collections in props, state, and context.
+    - Unidirectional data flow and safe *pure render optimization*.
+    - Two-way data binding ([Guide to Data Binding Use Cases](https://github.com/Volicon/NestedReact/blob/master/example/databinding.md))
+    - Optional local component subtree updates.     
+- Lightweight type annotations for props, *state*, and context as a replacement for `PropTypes`.
+- Gradual transition procedure for backbone applications ([Backbone Migration Guide](https://github.com/Volicon/NestedReact/blob/master/docs/BackboneViews.md)):
+    - Complete interoperation with existing Backbone Views allowing you to reuse existing code and avoid upfront application rewrite.
+    - Any type of application refactoring strategy is possible - top-to-bottom, bottom-to-top, and random parts at the middle.  
+    - Support for Backbone events and jQuery accessors in React components simplifies View refactoring. 
 
 ## Resources
 
-- [Documentation](https://github.com/Volicon/NestedReact)
+- [NestedReact docs](https://github.com/Volicon/NestedReact)
+- [Post-backbone models](https://github.com/Volicon/NestedTypes): 10x more performance, type safety, aggregation and relations right out of box. 
 - [Used by](http://www.volicon.com/)
 
 ## Implementation
 
-This TodoMVC application is written to demonstrate two-way data binding, data layer, and state management facilities,
-provided by combination of [NestedReact](https://github.com/Volicon/NestedReact) and 
-[NestedTypes](https://github.com/Volicon/NestedTypes) data framework.
+This TodoMVC application is written to demonstrate how powerful and expressive declarative OO data layer can be in React.
 
-This example shows how to achieve pure unidirectional data flow (which is common for Flux applications)
-without the usage of `Flux` pattern and excessive implementation efforts.
+It features pure unidirectional data flow (which is common for Flux applications) achieved with conventional design
+technique. Solution is several times shorter than any `flux` implementation, and in fact is one of the
+ most compact and clean TodoMVC implementations available.
 
 ## Credit
 
