@@ -4,8 +4,8 @@ module.exports = {
     entry  : './js/main.jsx',
     output : {
         // export itself to a global var
-        path       : __dirname + '/js',
-        publicPath : '/js/',
+        path       : __dirname,
+        publicPath : '/',
         filename   : 'app.js'
     },
 
