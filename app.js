@@ -94,6 +94,7 @@
 	
 		render: function render() {
 			var todos = this.state.todos;
+			var hasTodos = Boolean(todos.length);
 	
 			return _nestedreact2['default'].createElement(
 				'div',
@@ -104,8 +105,8 @@
 					_nestedreact2['default'].createElement(_addtodoJsx2['default'], { onEnter: function (desc) {
 							return todos.addTodo(desc);
 						} }),
-					_nestedreact2['default'].createElement(_todolistJsx2['default'], { todos: todos, filterDone: this.state.filterDone }),
-					_nestedreact2['default'].createElement(_filterJsx2['default'], { count: todos.activeCount,
+					hasTodos && _nestedreact2['default'].createElement(_todolistJsx2['default'], { todos: todos, filterDone: this.state.filterDone }),
+					hasTodos && _nestedreact2['default'].createElement(_filterJsx2['default'], { count: todos.activeCount,
 						filterLink: this.state.getLink('filterDone'),
 						onClear: function () {
 							return todos.clearCompleted();

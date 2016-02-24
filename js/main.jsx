@@ -21,17 +21,18 @@ const App = React.createClass({
 	},
 
 	render(){
-		let { todos } = this.state;
+		let { todos } = this.state,
+			hasTodos  = Boolean( todos.length );
 
 		return (
 			<div>
 				<section className="todoapp">
 					<AddTodo onEnter={ desc => todos.addTodo( desc ) }/>
-					<TodoList todos={ todos } filterDone={ this.state.filterDone }/>
-					<Filter count={ todos.activeCount }
+					{ hasTodos && <TodoList todos={ todos } filterDone={ this.state.filterDone }/> }
+					{ hasTodos && <Filter count={ todos.activeCount }
 							filterLink={ this.state.getLink( 'filterDone' )}
 							onClear={ () => todos.clearCompleted() }
-					/>
+					/>}
 				</section>
 				<footer className="info">
 					<p>Double-click to edit a todo</p>
