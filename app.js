@@ -37754,7 +37754,7 @@
 		displayName: "AddTodo",
 	
 		props: {
-			onEnter: Function
+			onEnter: Function.value(function () {})
 		},
 	
 		state: {
@@ -37782,9 +37782,9 @@
 	
 			if (keyCode === 13) {
 				var state = this.state;
-				var onEnter = this.props.onEnter;
+				var props = this.props;
 	
-				onEnter && state.desc && onEnter(state.desc);
+				state.desc && props.onEnter(state.desc);
 				state.desc = "";
 			}
 		}

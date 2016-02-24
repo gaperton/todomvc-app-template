@@ -2,7 +2,7 @@ import React from 'nestedreact'
 
 const AddTodo = React.createClass({
 	props : {
-		onEnter : Function
+		onEnter : Function.value( function(){} )
 	},
 
 	state : {
@@ -23,9 +23,9 @@ const AddTodo = React.createClass({
 
 	onKeyDown({ keyCode }){
 		if( keyCode === 13 ){
-			let { state, props : { onEnter } } = this;
+			let { state, props } = this;
 
-			onEnter && state.desc && onEnter( state.desc );
+			state.desc && props.onEnter( state.desc );
 			state.desc = "";
 		}
 	}
