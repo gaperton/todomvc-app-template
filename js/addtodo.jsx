@@ -23,9 +23,9 @@ const AddTodo = React.createClass({
 
 	onKeyDown({ keyCode }){
 		if( keyCode === 13 ){
-			let { state, props } = this;
+			let { state, props : { onEnter } } = this;
 
-			props.onEnter && props.onEnter( state.desc );
+			onEnter && state.desc && onEnter( state.desc );
 			state.desc = "";
 		}
 	}

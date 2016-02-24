@@ -37782,9 +37782,9 @@
 	
 			if (keyCode === 13) {
 				var state = this.state;
-				var props = this.props;
+				var onEnter = this.props.onEnter;
 	
-				props.onEnter && props.onEnter(state.desc);
+				onEnter && state.desc && onEnter(state.desc);
 				state.desc = "";
 			}
 		}
